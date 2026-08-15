@@ -11,5 +11,10 @@ def browser():
 @pytest.fixture
 def page(browser):
     page = browser.new_page()
+    context = browser.new_context(
+            record_video_dir="videos_evidencia/"   # carpeta en raíz del proyecto
+        )
+    page = context.new_page()
     yield page
+    context.close()
     page.close()
