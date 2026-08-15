@@ -1,3 +1,4 @@
+import logging
 import pytest
 from playwright.sync_api import sync_playwright
 from pytest_bdd_report import attach
@@ -50,28 +51,8 @@ def pytest_runtest_makereport(item, call):
     if "page" in item.fixturenames:
         setattr(item, "rep_" + rep.when, rep)
         
-#def pytest_runtest_makereport(item, call):
-#    if "page" in item.fixturenames:
-#        outcome = yield
-#        rep = outcome.get_result()
-#        setattr(item, "rep_" + rep.when, rep)
-
-# --- Fixture automático para capturas ---
-@pytest.fixture(autouse=True)
-def screenshot_with_marks(page, request):
-    yield
-    if hasattr(request.node, "rep_call"):
-        success = not request.node.rep_call.failed
-        raw_path = f"{request.node.name}.png"
-        page.screenshot(path=raw_path)
-        marked_path = mark_screenshot(raw_path, success=success)
-
-        # Adjuntar al reporte BDD con feature y scenario
-        with open(marked_path, "rb") as f:
-            attach.screenshot(
-                f.read(),
-                feature_name="Registro de estudiante en demoqa",   # igual al Feature en tu .feature
-                scenario_name="Seleccionar género masculino"  # igual al Scenario en tu .feature
-            )
-
-
+def pytest_configure(config):
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s [%(levelname)s] %(message)s"
+    )
