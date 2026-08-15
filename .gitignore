@@ -216,3 +216,10 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Project-specific exclusions
+# Cucumber data files generated during test execution
+.cucumber-data.json
+
+# Video evidence from test runs (automatically generated)
+videos_evidencia/
